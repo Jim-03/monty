@@ -61,6 +61,7 @@ void readAndPrintLines(void)
 	while (getline(&args->line, &n, args->fileStream) != -1)
 	{
 		printf("%s", args->line);
+		line_to_words();
 	}
 }
 

@@ -50,6 +50,9 @@ typedef struct arg_s
 	FILE *fileStream;
 	char *line;
 	unsigned int count;
+	int wordCount;
+	char **someWords;
+	instruction_t *cmd;
 } arg_t;
 
 extern arg_t *args;
@@ -59,4 +62,6 @@ void initialize(void);
 void get_fileStream(char *file);
 void cleanup(void);
 void readAndPrintLines(void);
+void line_to_words(void);
+
 #endif
