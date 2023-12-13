@@ -7,6 +7,7 @@
 #include <fcntl.h>
 #include <string.h>
 #include <ctype.h>
+#include <fcntl.h>
 
 /**
  * struct stack_s - doubly linked list representation of a stack (or queue)
@@ -19,9 +20,9 @@
  */
 typedef struct stack_s
 {
-        int n;
-        struct stack_s *prev;
-        struct stack_s *next;
+	int n;
+	struct stack_s *prev;
+	struct stack_s *next;
 } stack_t;
 
 /**
@@ -34,20 +35,28 @@ typedef struct stack_s
  */
 typedef struct instruction_s
 {
-        char *opcode;
-        void (*f)(stack_t **stack, unsigned int line_number);
+	char *opcode;
+	void (*f)(stack_t **stack, unsigned int line_number);
 } instruction_t;
 
+/**
+ * struct arg_s - structure to hold variables
+ * @fileStream: the stram of a file
+ * @line: line read from fileStream
+ * @count: the line number
+ */
 typedef struct arg_s
 {
 	FILE *fileStream;
 	char *line;
+	unsigned int count;
 } arg_t;
 
 extern arg_t *args;
 int main(int argc, char **argv);
 void validate(int num);
-void initialize();
+void initialize(void);
 void get_fileStream(char *file);
-
+void cleanup(void);
+void readAndPrintLines(void);
 #endif

@@ -13,5 +13,7 @@ int main(int argc, char **argv)
 	validate(argc);
 	initialize();
 	get_fileStream(argv[1]);
+	readAndPrintLines();
+	cleanup();
 	return (0);
 }

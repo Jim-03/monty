@@ -6,13 +6,11 @@
  */
 void validate(int num)
 {
-	if (num != 2) /*no file provided*/
+	if (num != 2)
 	{
 		dprintf(2, "USAGE: monty file\n");
 		exit(EXIT_FAILURE);
 	}
-	else
-		return;
 }
 
 /**
@@ -21,13 +19,11 @@ void validate(int num)
 void initialize(void)
 {
 	args = malloc(sizeof(arg_t));
-	if (!args)
+	if (args == NULL)
 	{
-		dprintf(2, "Error: malloc failed\n");
-		free_arg();
+		perror("Error: malloc failed");
 		exit(EXIT_FAILURE);
 	}
-
 	args->fileStream = NULL;
 	args->line = NULL;
 }
@@ -38,22 +34,42 @@ void initialize(void)
  */
 void get_fileStream(char *file)
 {
-	int f;
+	int file_descriptor = open(file, O_RDONLY);
 
-	f = open(file, O_RDONLY);
-	if (f == -1)
+	if (file_descriptor == -1)
 	{
-		dprintf(stderr, "Error: Can't open file %s\n", file);
+		perror("Error: Can't open file");
 		free_arg();
 		exit(EXIT_FAILURE);
 	}
 
-	args->fileStream = fdopen(f, "r");
+	args->fileStream = fdopen(file_descriptor, "r");
 	if (args->fileStream == NULL)
 	{
-		close(f);
-		dprintf(stderr, "Error: Can't open file %s\n", file);
+		perror("Error: Can't open file");
+		close(file_descriptor);
 		free_arg();
 		exit(EXIT_FAILURE);
 	}
 }
+
+/**
+ * readAndPrintLines - reads a line and prints it
+ */
+void readAndPrintLines(void)
+{
+	while (getline(&args->line, &n, args->fileStream) != -1)
+	{
+		printf("%s", args->line);
+	}
+}
+
+/**
+ * cleanup - Close the file stream and free allocated memory
+ */
+void cleanup(void)
+{
+	fclose(args->fileStream);
+	free_arg();
+}
+
